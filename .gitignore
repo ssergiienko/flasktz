@@ -61,3 +61,4 @@ target/
 .directory
 
 db/*
+!db/.gitkeep
