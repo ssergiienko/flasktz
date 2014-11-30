@@ -34,3 +34,31 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return "User(email='{0}')".format(self.email)
+
+
+books_authors = db.Table('books_authors',
+    db.Column('book_id', db.Integer(), db.ForeignKey('book.id')),
+    db.Column('author_id', db.Integer(), db.ForeignKey('author.id')))
+
+
+class Book(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    title = db.Column(db.String(255))
+
+    def __init__(self, title):
+        self.title = title
+
+    def __repr__(self):
+        return "Book(title='{0}')".format(self.title)
+
+
+class Author(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(255), unique=True)
+    books = db.relationship('Book', secondary=books_authors, backref=db.backref('authors', lazy='dynamic'))
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return "Author(name='{0}')".format(self.name)
