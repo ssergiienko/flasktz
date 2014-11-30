@@ -60,4 +60,4 @@ target/
 #OS
 .directory
 
-db
+db/*
