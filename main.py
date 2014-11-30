@@ -1,15 +1,38 @@
 # coding: utf-8
 
 from flask import Flask
+from flask.ext.security import Security, SQLAlchemyUserDatastore, login_required, roles_required, current_user
 
-DEBUG = True
+from models import db, User, Role
 
 app = Flask(__name__)
+
+app.config['DEBUG'] = True
+app.config['SECRET_KEY'] = 'jg2jklrqwioptopk5900-349238eiopfeopw0-12'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/test.db'
+
+db.init_app(app)
+
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+security = Security(app, user_datastore)
+
+
+@app.before_first_request
+def init_data():
+    from populate_db import populate_all
+    populate_all()
 
 
 @app.route('/')
 def index():
     return 'Hello world'
 
+
+@app.route('/authorized/')
+@login_required
+@roles_required('admin')
+def secret():
+    return 'something secret...'
+
 if __name__ == '__main__':
-    app.run('0.0.0.0', 8000, debug=DEBUG)
+    app.run('0.0.0.0', 8000)
