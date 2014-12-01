@@ -1,0 +1,7 @@
+{% extends 'layout_page.html' %}
+
+{% block content %}
+    {% for author in data %}
+        {{ author.name }}<br>
+    {% endfor %}
+{% endblock %}

@@ -19,10 +19,12 @@ def create_books():
     b.authors.append(a)
     db.session.add(b)
 
-    b = Book(u'Финансист')
+    b1 = Book(u'Финансист')
+    b2 = Book(u'Титан')
     a = Author(u'Теодор Драйзер')
-    b.authors.append(a)
-    db.session.add(b)
+    b1.authors.append(a)
+    b2.authors.append(a)
+    db.session.add_all([b1, b2])
 
     b = Book(u'Dive into Python')
     a = Author(u'Марк Пилгрим')

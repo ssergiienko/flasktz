@@ -20,7 +20,7 @@ class Role(db.Model, RoleMixin):
         self.name = name
 
     def __repr__(self):
-        return "Role(name='{0}')".format(self.name)
+        return u"Role(name='{0}')".format(self.name)
 
 
 class User(db.Model, UserMixin):
@@ -33,7 +33,7 @@ class User(db.Model, UserMixin):
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
 
     def __repr__(self):
-        return "User(email='{0}')".format(self.email)
+        return u"User(email='{0}')".format(self.email)
 
 
 books_authors = db.Table('books_authors',
@@ -48,8 +48,11 @@ class Book(db.Model):
     def __init__(self, title):
         self.title = title
 
+    def __unicode__(self):
+        return self.__repr__().decode('utf-8')
+
     def __repr__(self):
-        return "Book(title='{0}')".format(self.title)
+        return u"Book(title='{0}')".format(self.title).encode('utf-8')
 
 
 class Author(db.Model):
@@ -60,5 +63,8 @@ class Author(db.Model):
     def __init__(self, name):
         self.name = name
 
+    def __unicode__(self):
+        return self.__repr__().decode('utf-8')
+
     def __repr__(self):
-        return "Author(name='{0}')".format(self.name)
+        return u"Author(name='{0}')".format(self.name).encode('utf-8')
