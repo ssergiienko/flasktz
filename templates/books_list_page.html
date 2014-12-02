@@ -3,6 +3,9 @@
 {% block content %}
     <a href="{{ url_for('create_book') }}">Create book</a><br>
     {% for book in books %}
-        <a href="{{ url_for('edit_books', id_=book.id) }}">{{ book.title }}</a><br>
+        <div id="{{ book.id }}">
+            <a href="{{ url_for('edit_books', id_=book.id) }}">{{ book.title }}</a>
+            <input class="book_delete" id="{{ book.id }}" type="button" value="DELETE">
+        </div>
     {% endfor %}
 {% endblock %}

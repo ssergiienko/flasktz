@@ -17,6 +17,13 @@ $(document).ready(function() {
             } else {
                 books_block.text('');
             }
-        })
+        });
+        $('.book_delete').on('click', function(){
+            $.ajax(delete_books_url + this.id, {
+                type: 'DELETE',
+                error: function(e) {alert(e.responseText)},
+                success: function() {$('div#' + this.id).remove();}
+            });
+        });
     }
 );

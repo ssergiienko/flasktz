@@ -92,7 +92,7 @@ def edit_books(id_=None):
         else:    # request.method == 'DELETE'
             db.session.delete(book)
             db.session.commit()
-            return redirect(url_for('edit_books'))  # TODO what return to jquery
+            return '', 200
     return render_template('books_edit_page.html', form=form, obj_id=book.id)
 
 

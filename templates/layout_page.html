@@ -23,13 +23,17 @@
 {% endblock %}
 
 <div>
-    <div>Быстрый ajax-поиск книг(с учётом регистра для кириллицы из-за особенностей sqlite):<div>
-    <input id="search_input" type="search" name="search">
-    <div id="books">Начинайте вводить название книги</div>
+    <div>Быстрый jQuery ajax поиск книг(с учётом регистра для кириллицы, из-за особенностей sqlite):<div>
+    <input id="search_input" type="search" name="search" placeholder="Начинайте вводить название книги">
+    <div id="books"></div>
 </div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script>var search_url = {{ url_for('search_books') }};</script>
+<script>
+    // for rendered variables
+    var search_url = '{{ url_for('search_books') }}';
+    var delete_books_url = '{{ url_for('edit_books') }}';
+</script>
 <script src="/static/main.js"></script>
 
 </body>
