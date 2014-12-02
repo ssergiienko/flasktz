@@ -1,0 +1,8 @@
+{% extends 'layout_page.html' %}
+
+{% block content %}
+    <a href="{{ url_for('create_book') }}">Create book</a><br>
+    {% for book in books %}
+        <a href="{{ url_for('edit_books', id_=book.id) }}">{{ book.title }}</a><br>
+    {% endfor %}
+{% endblock %}

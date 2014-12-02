@@ -1,9 +1,10 @@
 # coding: utf-8
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask.ext.security import Security, SQLAlchemyUserDatastore, login_required, roles_required, current_user
 
 from models import db, User, Role, Book, Author
+from forms import BookForm, AuthorForm
 
 app = Flask(__name__)
 
@@ -30,17 +31,17 @@ def index():
 
 @app.route('/books/')
 def all_books():
-    books = db.session.query(Book).all()
-    return render_template('books_page.html', data=books)
+    books = Book.query.all()
+    return render_template('books_list_page.html', books=books)
 
 
 @app.route('/authors/')
 def all_authors():
-    authors = db.session.query(Author).all()
-    return render_template('authors_page.html', data=authors)
+    authors = Author.query.all()
+    return render_template('authors_list_page.html', authors=authors)
 
 
-@app.route('/search/')
+@app.route('/search/')  # TODO переделать
 def search_books():
     s_string = request.args.get('str', '')
     if s_string:
@@ -50,6 +51,50 @@ def search_books():
     # Такое усложнение из-за https://github.com/mitsuhiko/flask/issues/673
     # http://flask.pocoo.org/docs/0.10/security/#json-security
     return jsonify({n: book.title for n, book in enumerate(books)})
+
+
+@app.route('/books/create/', methods=('GET', 'POST',))
+@login_required
+@roles_required('admin')
+def create_book():
+    if request.method == 'GET':
+        form = BookForm()
+    else:   # POST
+        form = BookForm(request.form)
+        if form.validate():
+            book = Book('')
+            form.populate_obj(book)
+            db.session.add(book)
+            db.session.commit()
+            return redirect(url_for('edit_books'))
+    return render_template('books_edit_page.html', form=form)
+
+
+@app.route('/books/edit/<int:id_>', methods=('GET', 'POST', 'DELETE'))
+@app.route('/books/edit/')
+@login_required
+@roles_required('admin')
+def edit_books(id_=None):
+    if id_ is None:
+        books = Book.query.all()
+        return render_template('books_list_page.html', books=books)
+    else:
+        book = Book.query.get_or_404(id_)
+        if request.method == 'GET':
+            form = BookForm(obj=book)
+        elif request.method == 'POST':
+            form = BookForm(request.form)
+            if form.validate():
+                form.populate_obj(book)
+                db.session.add(book)
+                db.session.commit()
+                return redirect(url_for('edit_books'))
+        else:    # request.method == 'DELETE'
+            db.session.delete(book)
+            db.session.commit()
+            return redirect(url_for('edit_books'))  # TODO what return to jquery
+    return render_template('books_edit_page.html', form=form, obj_id=book.id)
+
 
 @app.route('/authorized/')
 @login_required
