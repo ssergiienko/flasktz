@@ -32,13 +32,13 @@ def index():
 @app.route('/books/')
 def all_books():
     books = Book.query.all()
-    return render_template('books_list_page.html', books=books)
+    return render_template('books_all_page.html', books=books)
 
 
 @app.route('/authors/')
 def all_authors():
     authors = Author.query.all()
-    return render_template('authors_list_page.html', authors=authors)
+    return render_template('authors_all_page.html', authors=authors)
 
 
 @app.route('/search/')  # TODO переделать
@@ -51,6 +51,49 @@ def search_books():
     # Такое усложнение из-за https://github.com/mitsuhiko/flask/issues/673
     # http://flask.pocoo.org/docs/0.10/security/#json-security
     return jsonify({n: book.title for n, book in enumerate(books)})
+
+
+@app.route('/authors/create/', methods=('GET', 'POST',))
+@login_required
+@roles_required('admin')
+def create_author():
+    if request.method == 'GET':
+        form = AuthorForm()
+    else:   # POST
+        form = AuthorForm(request.form)
+        if form.validate():
+            author = Author('')
+            form.populate_obj(author)
+            db.session.add(author)
+            db.session.commit()
+            return redirect(url_for('edit_authors'))
+    return render_template('authors_edit_page.html', form=form)
+
+
+@app.route('/authors/edit/<int:id_>', methods=('GET', 'POST', 'DELETE'))
+@app.route('/authors/edit/')
+@login_required
+@roles_required('admin')
+def edit_authors(id_=None):
+    if id_ is None:
+        authors = Author.query.all()
+        return render_template('authors_list_page.html', authors=authors)
+    else:
+        author = Author.query.get_or_404(id_)
+        if request.method == 'GET':
+            form = AuthorForm(obj=author)
+        elif request.method == 'POST':
+            form = AuthorForm(request.form)
+            if form.validate():
+                form.populate_obj(author)
+                db.session.add(author)
+                db.session.commit()
+                return redirect(url_for('edit_authors'))
+        else:    # request.method == 'DELETE'
+            db.session.delete(author)
+            db.session.commit()
+            return '', 200
+    return render_template('authors_edit_page.html', form=form, obj_id=author.id)
 
 
 @app.route('/books/create/', methods=('GET', 'POST',))
@@ -94,13 +137,6 @@ def edit_books(id_=None):
             db.session.commit()
             return '', 200
     return render_template('books_edit_page.html', form=form, obj_id=book.id)
-
-
-@app.route('/authorized/')
-@login_required
-@roles_required('admin')
-def secret():
-    return 'something secret...'
 
 if __name__ == '__main__':
     app.run('0.0.0.0', 8000)

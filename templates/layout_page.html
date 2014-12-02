@@ -17,9 +17,15 @@
     {% endif %}
 </div>
 
+<p>=====================================================================</p>
 {% block content %}
-    <a href="{{ url_for('all_books') }}">Все книги</a><br>
-    <a href="{{ url_for('all_authors') }}">Все авторы</a><br>
+    {% if current_user.is_authenticated() %}
+        <a href="{{ url_for('edit_books') }}">Все книги</a><br>
+        <a href="{{ url_for('edit_authors') }}">Все авторы</a><br>
+    {% else %}
+        <a href="{{ url_for('all_books') }}">Все книги</a><br>
+        <a href="{{ url_for('all_authors') }}">Все авторы</a><br>
+    {% endif %}
 {% endblock %}
 
 <div>
@@ -32,7 +38,6 @@
 <script>
     // for rendered variables
     var search_url = '{{ url_for('search_books') }}';
-    var delete_books_url = '{{ url_for('edit_books') }}';
 </script>
 <script src="/static/main.js"></script>
 

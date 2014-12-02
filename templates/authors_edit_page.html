@@ -2,12 +2,12 @@
 
 {% block content %}
     <form method="POST" action="{% if obj_id %}
-                                    {{ url_for('edit_books', id_=obj_id) }}
+                                    {{ url_for('edit_authors', id_=obj_id) }}
                                 {% else %}
-                                    {{ url_for('create_book') }}
+                                    {{ url_for('create_author') }}
                                 {% endif %}">
     {% for f in form %}
-        {{ f }}
+        {{ f.label }}{{ f }}
     {% endfor %}
     <input type="submit" value="Сохранить">
     </form>

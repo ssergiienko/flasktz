@@ -1,0 +1,7 @@
+{% extends 'layout_page.html' %}
+
+{% block content %}
+    {% for author in authors %}
+        <a href="{{ url_for('edit_authors', id_=author.id) }}">{{ author.name }}</a><br>
+    {% endfor %}
+{% endblock %}

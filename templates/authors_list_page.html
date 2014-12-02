@@ -1,7 +1,11 @@
 {% extends 'layout_page.html' %}
 
 {% block content %}
+    <a href="{{ url_for('create_author') }}">Create author</a><br>
     {% for author in authors %}
-        {{ author.name }}<br>
+        <div class="obj{{ author.id }}">
+            <a href="{{ url_for('edit_authors', id_=author.id) }}" class="obj{{ author.id }}">{{ author.name }}</a>
+            <input class="button_delete" data-id="{{ author.id }}" type="button" value="DELETE">
+        </div>
     {% endfor %}
 {% endblock %}

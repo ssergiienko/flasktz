@@ -18,11 +18,13 @@ $(document).ready(function() {
                 books_block.text('');
             }
         });
-        $('.book_delete').on('click', function(){
-            $.ajax(delete_books_url + this.id, {
+        $('.button_delete').on('click', function(){
+            var obj_id = this.dataset.id;
+            var url = $('a.obj' + obj_id).attr('href');
+            $.ajax(url, {
                 type: 'DELETE',
                 error: function(e) {alert(e.responseText)},
-                success: function() {$('div#' + this.id).remove();}
+                success: function() {$('div.obj' + obj_id).remove()}
             });
         });
     }
