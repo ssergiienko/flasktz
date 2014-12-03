@@ -6,8 +6,11 @@
                                 {% else %}
                                     {{ url_for('create_book') }}
                                 {% endif %}">
-    {% for f in form %}
-        {{ f }}
+    {% for field in form %}
+        {% for error in field.errors %}
+            {{ error }}<br>
+        {% endfor %}
+        {{ field.label }}<br>{{ field }}<br>
     {% endfor %}
     <input type="submit" value="Сохранить">
     </form>

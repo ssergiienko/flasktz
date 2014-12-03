@@ -1,7 +1,10 @@
 {% extends 'layout_page.html' %}
 
 {% block content %}
+    <p>ПЕРЕЧЕНЬ АВТОРОВ</p>
     {% for author in authors %}
-        <a href="{{ url_for('edit_authors', id_=author.id) }}">{{ author.name }}</a><br>
+        <div class="item">
+            <a href="{{ url_for('edit_authors', id_=author.id) }}">{{ author.name }}</a>
+        </div>
     {% endfor %}
 {% endblock %}

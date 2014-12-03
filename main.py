@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-from flask.ext.security import Security, SQLAlchemyUserDatastore, login_required, roles_required, current_user
+from flask.ext.security import Security, SQLAlchemyUserDatastore, login_required, roles_required
 
 from models import db, User, Role, Book, Author
 from forms import BookForm, AuthorForm
@@ -41,11 +41,12 @@ def all_authors():
     return render_template('authors_all_page.html', authors=authors)
 
 
-@app.route('/search/')  # TODO переделать
-def search_books():
-    s_string = request.args.get('str', '')
+@app.route('/search/<s_string>')
+def search_books(s_string):
     if s_string:
         books = Book.query.filter(Book.title.contains(s_string)).all()
+        if not books:   # fallback to search by author
+            books = Book.query.filter(Book.authors.any(Author.name.contains(s_string))).all()
     else:
         books = []
     # Такое усложнение из-за https://github.com/mitsuhiko/flask/issues/673

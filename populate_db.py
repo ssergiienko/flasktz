@@ -5,12 +5,12 @@ from models import Role, Author, Book
 
 
 def create_roles():
-    db.session.add(Role('admin'))
+    db.session.add(Role(u'admin'))
 
 
 def create_user():
-    u = user_datastore.create_user(email='m@m.ua', password='password')
-    u.roles.append(db.session.query(Role).filter_by(name='admin').one())
+    u = user_datastore.create_user(email=u'm@m.ua', password=u'password')
+    u.roles.append(db.session.query(Role).filter_by(name=u'admin').one())
 
 
 def create_books():

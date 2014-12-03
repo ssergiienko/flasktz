@@ -6,38 +6,36 @@
     <link rel="stylesheet" href="/static/base.css">
 </head>
 <body>
-
-<a href="{{ url_for('index') }}">На главную</a>
-
-<div>
+<div class="menu">
+    <a href="{{ url_for('index') }}">На главную</a>
     {% if current_user.is_authenticated() %}
-        <a href="{{ url_for('security.logout') }}">LOGOUT</a><br>
+        <a href="{{ url_for('security.logout') }}">Log out (Вы: {{ current_user.email }})</a><br>
     {% else %}
-        <a href="{{ url_for('security.login') }}">LOGIN</a><br>
+        <a href="{{ url_for('security.login') }}">Log in</a><br>
     {% endif %}
 </div>
 
-<p>=====================================================================</p>
-{% block content %}
-    {% if current_user.is_authenticated() %}
-        <a href="{{ url_for('edit_books') }}">Все книги</a><br>
-        <a href="{{ url_for('edit_authors') }}">Все авторы</a><br>
-    {% else %}
-        <a href="{{ url_for('all_books') }}">Все книги</a><br>
-        <a href="{{ url_for('all_authors') }}">Все авторы</a><br>
-    {% endif %}
-{% endblock %}
-
-<div>
-    <div>Быстрый jQuery ajax поиск книг(с учётом регистра для кириллицы, из-за особенностей sqlite):<div>
-    <input id="search_input" type="search" name="search" placeholder="Начинайте вводить название книги">
-    <div id="books"></div>
-</div>
+<section class="content">
+    {% block content %}
+    <div class="search">
+        <div>Быстрый jQuery ajax поиск по книгам и автору одновременно (автоматически) и с учётом регистра для кириллицы, из-за особенностей sqlite:</div>
+        <input class="search" type="search" name="search" placeholder="Начинайте вводить название книги или автора">
+        <div id="books"></div>
+    </div>
+        {% if current_user.is_authenticated() %}
+            <a href="{{ url_for('edit_books') }}">Редактировать книги</a><br>
+            <a href="{{ url_for('edit_authors') }}">Редактировать авторов</a><br>
+        {% else %}
+            <a href="{{ url_for('all_books') }}">Все книги</a><br>
+            <a href="{{ url_for('all_authors') }}">Все авторы</a><br>
+        {% endif %}
+    {% endblock %}
+</section>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
     // for rendered variables
-    var search_url = '{{ url_for('search_books') }}';
+    var search_url = '{{ url_for('search_books', s_string='') }}';
 </script>
 <script src="/static/main.js"></script>
 

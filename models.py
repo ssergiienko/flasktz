@@ -43,13 +43,13 @@ books_authors = db.Table('books_authors',
 
 class Book(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    title = db.Column(db.String(255))
+    title = db.Column(db.String(255), nullable=False)
 
     def __init__(self, title):
         self.title = title
 
     def __unicode__(self):
-        return self.__repr__().decode('utf-8')
+        return self.title
 
     def __repr__(self):
         return u"Book(title='{0}')".format(self.title).encode('utf-8')
@@ -57,14 +57,14 @@ class Book(db.Model):
 
 class Author(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(255), unique=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
     books = db.relationship('Book', secondary=books_authors, backref=db.backref('authors', lazy='dynamic'))
 
     def __init__(self, name):
         self.name = name
 
     def __unicode__(self):
-        return self.__repr__().decode('utf-8')
+        return self.name
 
     def __repr__(self):
         return u"Author(name='{0}')".format(self.name).encode('utf-8')

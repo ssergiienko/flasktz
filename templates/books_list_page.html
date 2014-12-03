@@ -1,9 +1,10 @@
 {% extends 'layout_page.html' %}
 
 {% block content %}
-    <a href="{{ url_for('create_book') }}">Create book</a><br>
+    <p>РЕДАКТИРОВАНИЕ КНИГ</p>
+    <a href="{{ url_for('create_book') }}">СОЗДАТЬ КНИГУ</a><br>
     {% for book in books %}
-        <div class="obj{{ book.id }}">
+        <div class="obj{{ book.id }} item">
             <a href="{{ url_for('edit_books', id_=book.id) }}" class="obj{{ book.id }}">{{ book.title }}</a>
             <input class="button_delete" data-id="{{ book.id }}" type="button" value="DELETE">
         </div>

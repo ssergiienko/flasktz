@@ -1,8 +1,40 @@
-div {
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
 p {
     font-size: 140%;
     color: #4191c0;
+}
+
+div.menu {
+    height: 2%;
+    padding: 2%;
+    text-align: center;
+}
+
+div.menu a {
+    margin-right: 1.5%;
+}
+
+section.content {
+    padding: 1%;
+    width: 70%;
+    margin: 0 auto;
+}
+
+div.search {
+    background-color: #e7f1ff;
+    padding: 1%;
+}
+
+input.search {
+    width: 350px;
+    margin: 2%;
+    margin-left: 0;
+    border: none;
+}
+
+div.item {
+    padding-top: 1%;
+}
+
+div.item input[type='button'] {
+    float: right;
 }
